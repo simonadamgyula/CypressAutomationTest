@@ -1,0 +1,125 @@
+================================================================================
+FUNCTIONAL TEST PLAN - TEST PHARMACY PALERMO
+================================================================================
+
+
+--------------------------------------------------------------------------------
+1. AUTHENTICATION & ACCOUNT (All Pages)
+--------------------------------------------------------------------------------
+
+Scenario: Quick access to registration
+  Given the user clicks on the "Accedi" (Login) icon in the header
+  When the user selects "Registrati" (Register) from the dropdown menu
+  Then the system should load the /customer/register page
+
+Scenario: User session persistence
+  Given the user has successfully logged in
+  When the user navigates between different sections (Home, Magazine, Products)
+  Then the user's name or a "Profile" link must remain visible in the header
+
+--------------------------------------------------------------------------------
+2. E-COMMERCE: CATALOG & PRODUCTS (/prodotti)
+--------------------------------------------------------------------------------
+
+Scenario: Sort products by ascending price
+  Given the user is on the product listing page
+  When the user selects "Prezzo più basso prima" (Lowest price first) from the sort menu
+  Then the URL should contain the parameters ?sort=price&order=asc
+  And the products must be displayed in ascending order of price
+
+Scenario: Change display density (Limiter)
+  Given the user is viewing 9 products per page
+  When the user selects the "21" option from the "Mostra" (Show) selector
+  Then the page should reload displaying up to 21 product cards
+
+Scenario: Navigation between pages (Pagination)
+  Given the user is on page 1 of the products
+  When the user clicks the "Next" button or the number "2"
+  Then the system should load the subsequent page (?page=2)
+  And the "Previous" button must become clickable
+
+--------------------------------------------------------------------------------
+3. E-COMMERCE: CART & COMPARISON
+--------------------------------------------------------------------------------
+
+Scenario: Dynamic update of the cart counter
+  Given the user is on the product list
+  When the user clicks "Aggiungi" (Add) or enters the product detail page
+  Then the cart icon in the header (.cart__icon) must increment the item count
+  And the data must be correctly saved in the LocalStorage
+
+Scenario: Opening the cart summary
+  Given the user has items in the cart
+  When the user clicks the cart icon in the header
+  Then the side overlay (.cart__overlay) must be activated showing the summary
+
+Scenario: Product comparison counter synchronization
+  Given the user adds a product to the comparison list
+  When the event is recorded in the LocalStorage ('compared_product')
+  Then the #compare-items-count element must update instantaneously
+
+--------------------------------------------------------------------------------
+4. CONTACTS & LEAD GENERATION (/contatti)
+--------------------------------------------------------------------------------
+
+Scenario: Contact form mandatory fields validation
+  Given the user leaves the "Nome e Cognome" (Name and Surname) or "E-mail" field empty
+  When they click the "Invia" (Send) button
+  Then the system must block the submission and highlight the missing fields
+
+Scenario: File attachment upload (Prescription/Document)
+  Given the user selects a file via the "file" input
+  When they submit the contact form
+  Then the system must transmit the file using a multipart/form-data request
+
+Scenario: Privacy Consent Constraint (GDPR)
+  Given the user has filled out the form
+  When they select "No" on the mandatory consent radio button (acceptance-a)
+  Then the submit button must be disabled or return a validation error
+
+--------------------------------------------------------------------------------
+5. SERVICES & BOOKINGS (Home /servizi)
+--------------------------------------------------------------------------------
+
+Scenario: Opening service information modal
+  Given the user is in the services section
+  When they click on the "Check up tiroide" (Thyroid check-up) card
+  Then the specific modal (#service_modal_2) must open without reloading the page
+
+Scenario: WhatsApp booking flow
+  Given the user has opened the service details in the modal
+  When they click the "Prenota un servizio" (Book a service) button
+  Then a WhatsApp chat must open with the correct pre-filled message
+
+--------------------------------------------------------------------------------
+6. MAGAZINE & ARTICLES (/magazine)
+--------------------------------------------------------------------------------
+
+Scenario: Hierarchical Breadcrumb navigation
+  Given the user is reading a specific article
+  When they click the "Magazine" entry in the breadcrumb path
+  Then they must be taken back to the general article index
+
+Scenario: Cross-linking between article and services
+  Given the user views the "Alias" block at the bottom of an article
+  When they click "Scopri di più" (Find out more) under "I nostri servizi"
+  Then they must be redirected to the /servizi page
+
+--------------------------------------------------------------------------------
+7. GLOBAL & CONTACT INFO (Footer / Header)
+--------------------------------------------------------------------------------
+
+Scenario: AJAX Search Suggestions
+  Given the user starts typing in the search bar (header)
+  When they enter at least 3 characters
+  Then the #search-suggestions div must display dynamic results
+
+Scenario: Global site language change
+  Given the user selects a different language from the footer (e.g., English)
+  When the selector triggers the onchange event
+  Then the page must reload with the ?locale=en parameter
+
+Scenario: Quick link functionality (Click-to-call)
+  Given the user views the contact info in the footer
+  When they click the phone number or the email address
+  Then the system must activate the tel: or mailto: protocol respectively
