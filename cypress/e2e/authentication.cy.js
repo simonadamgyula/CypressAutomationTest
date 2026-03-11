@@ -1,5 +1,5 @@
 /// <reference types="cypress"/>
-// const cypressRealEvents = require('cypress-real-events');
+/// <reference types="cypress-real-events"/>
 
 describe('Authentication', ()=>{
     it('Registration page', ()=>{
@@ -37,13 +37,13 @@ describe('Authentication', ()=>{
             cy.get("body").then(($body) =>{
                 // cy.get('.header__burger-lines').click(); For smaller screens
                 if($body.find("a[id='shop.magazine.index']").length != 0){
-                    cy.get("a[id='shop.magazine.index']").click();  //a[title='Magazine']
+                    cy.get("a[id='shop.magazine.index']").click();
                     cy.get('.account__title').should('contain', accountTitle);
                 }
         
                 if($body.find("a[id='shop.promos.index']").length != 0){
                     // cy.get('.header__burger-lines').click(); For smaller screens
-                    cy.get("a[id='shop.promos.index']").click();  // a[title='Prodotti']
+                    cy.get("a[id='shop.promos.index']").click();
                     cy.get('.account__title').should('contain', accountTitle);
                 }
 

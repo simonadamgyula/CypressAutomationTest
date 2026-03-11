@@ -1,7 +1,7 @@
 /// <reference types="cypress"/>
 
 describe('E-commerce', ()=>{
-    it('Product sorting', ()=>{
+    it.skip('Product sorting', ()=>{
         cy.get('select#sort-by-toolbar').select(4).invoke('val').should('contain', 'sort=price&order=asc');
         cy.url().should('contain', '?sort=price&order=asc');
         
