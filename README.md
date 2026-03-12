@@ -22,6 +22,38 @@ The code uses **enviroment variables**, which need to be declared before running
 - email: ```test@example.com```
 - password: ```password456```
 
+## Setup GitLab CI
+
+1. Add ```apiUrl```, ```email``` and ```password``` to your GitLab CI variables.
+2. Setup your ```.gitlab-ci.yml``` file:
+```
+stages:
+   - test
+
+variables:
+   URL: $URL
+
+cypress_tests:
+   stage: test
+   # Uses the official Cypress base image containing Node.js and necessary OS dependencies
+   image: cypress/base:20 
+
+   script:
+      - npm ci
+      # Runs Cypress tests headlessly in the terminal
+      - npx cypress run
+
+   allow_failure: true
+
+   artifacts:
+      when: always
+      paths:
+         # Standard Cypress output directories for artifacts
+         - cypress/videos/
+         - cypress/screenshots/
+      expire_in: 30 days
+```
+
 ## Test structure
 
 #### ```authentication.cy.js```
